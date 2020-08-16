@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+{% load static%}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    {% load static %}
+  <style media="screen">
+    #adds{
+       background: #4682b4;
+      border-style: double;
+      border-radius: 5px;
+    }
+    #fins{
+      background: #4682b4;
+      border-style: double;
+      border-radius: 5px;
+    }
+    .addsl{
+      color:white;
+    }
+    #del{
+      background:#DC143C;
+      COLOR:WHITE;
+      border-style: double;
+      border-radius: 5px;
+    }
+    #up{
+      background:#2e8b57;
+      COLOR:white;
+      border-style: double;
+      border-radius: 5px;
+    }
+    #done::before{
+      content: "✔";
+    }
+    #titles::before{
+
+    }
+    #done {
+
+      color:#2e8b57;
+    }
+    .imgnothing{
+       background-image: url('{% static "nothing.jpg"%}');
+
+       background-position: center;
+       background-size: cover;
+       background-attachment: fixed;
+      }
+      .dosomething{
+        background-image: url('{% static "nothing.jpg"%}');
+        background-position: center;
+        background-size: cover;
+        background-attachment: fixed;
+      }
+      .formdel{
+        display: inline;
+      }
+    </style>
+
+    <title></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  </head>
+
+
+  <body  id="task" class="tasks">
+    <br>
+    <div class="container">
+      
+          <button id="adds"><a class="addsl" href="{% url 'addentry' %}" >add</a></button>
+       <p>      </p>
+     
+              <button id="fins"><a class="addsl" href="{% url 'showdone' %}" >finished task</a></button>
+<br>
+<br>
+
+{% if count is 0 %}
+<script>
+document.getElementById("task").classList.remove("tasks");
+document.getElementById("task").classList.add("imgnothing");
+</script>
+{% endif %}
+
+
+{%if object%}
+<ul>
+{% for i in object%}
+<br>
+<div class="jumbotron">
+<h3 id="titles">  {{i.title}} </a></h3>
+{{i.due_date}}<br>
+<form class="formdel" action="{% url 'finished' i.id %}" method="post"> {%csrf_token%}
+  <input id="up" type=submit name='finish' value="finished">
+</form>
+
+<form action='{% url "delete" i.id%}' class="formdel" method=POST>{% csrf_token%}
+  <input id=del type="submit" value="delete">
+</form>
+
+</div>
+ <br>
+{%endfor%}
+{%endif%}
+
+{% if count is 0 %}
+<script>
+document.getElementById("task").classList.remove("imgnothing");
+document.getElementById("task").classList.add("dosomething");
+</script>
+{% endif %}
+{% if doneobj %}
+  {% for i in doneobj %}
+  <div class="jumbotron">
+    {{i.title}} <h3 id='done'> completed </h3>
+    <form action="{% url 'delacc' i.id %}" method=POST>{% csrf_token%}
+      <input id=del type="submit" value="delete task">
+    </form>
+  </div>
+    {% endfor%}
+{% endif %}
+
+</div>
